@@ -1,0 +1,19 @@
+:root {
+  /* Primary */
+  --color-primary: rgba(226, 0, 84, 1);
+  --color-dark: rgba(20, 25, 40, 1);
+
+  /* Text */
+  --text-primary: rgba(10, 42, 81, 1);
+  --text-secondary: rgba(52, 68, 86, 1);
+  --text-muted: rgba(100, 126, 154, 1);
+
+  /* Background */
+  --bg-white: #ffffff;
+  --bg-light: rgba(233, 237, 245, 1);
+  --bg-soft: rgba(248, 249, 252, 1);
+
+  /* Button */
+  --btn-primary: rgba(226, 0, 84, 1);
+  --btn-dark: rgba(20, 25, 40, 1);
+}

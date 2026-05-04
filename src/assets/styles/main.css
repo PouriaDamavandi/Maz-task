@@ -1,0 +1,12 @@
+@import './variables.css';
+
+body {
+  font-family: 'IranYekan', sans-serif;
+  background: var(--bg-soft);
+  margin: 0;
+}
+
+@font-face {
+  font-family: 'IranYekan';
+  src: url('@/assets/fonts/iranyekan.woff2') format('woff2');
+}
