@@ -1,16 +1,20 @@
 <script setup lang="ts">
-defineProps<{
-  filters: string[]
+import type { FilterItem } from '@/types/filter'
+
+const { filters } = defineProps<{
+  filters: FilterItem[]
 }>()
 
 const emit = defineEmits<{
-  (e: 'remove', value: string): void
+  (e: 'remove', type: FilterItem['type']): void
 }>()
 </script>
 
 <template>
   <div class="filters">
-    <span v-for="f in filters" :key="f" class="chip" @click="emit('remove', f)"> {{ f }} ✕ </span>
+    <span v-for="f in filters" :key="f.type" class="chip" @click="emit('remove', f.type)">
+      {{ f.label }} ✕
+    </span>
   </div>
 </template>
 

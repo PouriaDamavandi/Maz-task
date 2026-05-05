@@ -5,7 +5,37 @@ import Sidebar from '@/components/sidebar/AppSidebar.vue'
 import ProductGrid from '@/components/product/ProductGrid.vue'
 import ActiveFilters from '@/components/product/ActiveFilters.vue'
 
-const filters = ['Phone', 'Cheap']
+import { useProducts } from '@/composables/useProducts'
+import { useFilters } from '@/composables/useFilters'
+import { computed, onMounted } from 'vue'
+import type { FilterItem } from '@/types/filter'
+
+const { products, fetchProducts } = useProducts()
+
+const { search, sort, category, setSearch, setSort, setCategory, clearFilter } = useFilters()
+
+onMounted(() => {
+  fetchProducts()
+})
+
+const filtersList = computed<FilterItem[]>(() => {
+  const list: FilterItem[] = []
+
+  if (search.value) {
+    list.push({ type: 'search', label: search.value })
+  }
+
+  if (category.value) {
+    list.push({ type: 'category', label: category.value })
+  }
+
+  if (sort.value) {
+    list.push({ type: 'sort', label: sort.value })
+  }
+
+  return list
+})
+
 const router = useRouter()
 
 const categories = [
@@ -13,29 +43,8 @@ const categories = [
   { id: '2', name: 'Laptops', count: 8 },
 ]
 
-const products = [
-  { id: '1', title: 'Phone', image: 'https://via.placeholder.com/200' },
-  { id: '2', title: 'Laptop', image: 'https://via.placeholder.com/200' },
-]
-
-function onRemoveFilter(f: string) {
-  console.log('remove', f)
-}
-
 function onView(id: string | number) {
   router.push(`/products/${id}`)
-}
-
-function onSearch(val: string) {
-  console.log('search:', val)
-}
-
-function onSort(val: string) {
-  console.log('sort:', val)
-}
-
-function onCategory(val: string) {
-  console.log('category:', val)
 }
 </script>
 
@@ -44,16 +53,16 @@ function onCategory(val: string) {
     <!-- Sidebar -->
     <div class="sidebar">
       <Sidebar
-        @search="onSearch"
-        @sort-change="onSort"
-        @category-change="onCategory"
+        @search="setSearch"
+        @sort-change="setSort"
+        @category-change="setCategory"
         :categories="categories"
       />
     </div>
 
     <!-- Content -->
     <div class="content">
-      <ActiveFilters :filters="filters" @remove="onRemoveFilter" />
+      <ActiveFilters :filters="filtersList" @remove="clearFilter" />
 
       <ProductGrid :products="products" @view="onView" />
     </div>
