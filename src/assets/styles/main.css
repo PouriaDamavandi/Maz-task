@@ -8,5 +8,5 @@ body {
 
 @font-face {
   font-family: 'IranYekan';
-  src: url('@/assets/fonts/iranyekan.woff2') format('woff2');
+  src: url('@/assets/fonts/BYekan/BYekan.ttf') format('ttf');
 }
