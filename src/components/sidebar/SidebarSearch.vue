@@ -18,6 +18,6 @@ function onSearch() {
 <template>
   <SidebarSection title="Search">
     <BaseInput v-model="search" placeholder="Search..." />
-    <BaseButton @click="onSearch">Search</BaseButton>
+    <BaseButton @click="onSearch" aria-label="Search products">Search</BaseButton>
   </SidebarSection>
 </template>

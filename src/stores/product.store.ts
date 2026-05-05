@@ -12,6 +12,7 @@ export const useProductStore = defineStore('product', {
   state: () => ({
     products: [] as Product[],
     loading: false,
+    error: false
   }),
 
   actions: {

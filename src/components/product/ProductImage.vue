@@ -6,7 +6,7 @@ defineProps<{
 
 <template>
   <div class="image-wrapper">
-    <img :src="src" class="image" />
+    <img :src="src" class="image" alt="Product image" />
   </div>
 </template>
 

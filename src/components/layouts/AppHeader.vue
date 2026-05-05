@@ -12,7 +12,7 @@ const isMenuOpen = ref(false)
     </div>
 
     <div class="right desktop-nav">
-      <nav>
+      <nav aria-label="Main navigation">
         <ul>
           <li>Home</li>
           <li class="nav-item">
@@ -83,6 +83,12 @@ li:hover {
   .header {
     padding-top: 16px;
     padding-bottom: 16px;
+  }
+
+  .btn {
+    background: transparent;
+    border: 1px solid var(--btn-primary);
+    color: var(--btn-primary);
   }
 }
 </style>

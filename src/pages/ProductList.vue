@@ -5,18 +5,22 @@ import Sidebar from '@/components/sidebar/AppSidebar.vue'
 import ProductGrid from '@/components/product/ProductGrid.vue'
 import ActiveFilters from '@/components/product/ActiveFilters.vue'
 
-import { useProducts } from '@/composables/useProducts'
 import { useFilters } from '@/composables/useFilters'
 import { computed, onMounted } from 'vue'
-import type { FilterItem } from '@/types/filter'
 
-const { products, fetchProducts } = useProducts()
+import type { FilterItem } from '@/types/filter'
+import { useProductStore } from '@/stores/product.store'
+import BaseButton from '@/components/base/BaseButton.vue'
+
+const productStore = useProductStore()
+
+onMounted(() => productStore.fetchProducts())
+
+const products = computed(() => productStore.products)
+const loading = computed(() => productStore.loading)
+const error = computed(() => productStore.error)
 
 const { search, sort, category, setSearch, setSort, setCategory, clearFilter } = useFilters()
-
-onMounted(() => {
-  fetchProducts()
-})
 
 const filtersList = computed<FilterItem[]>(() => {
   const list: FilterItem[] = []
@@ -64,7 +68,17 @@ function onView(id: string | number) {
     <div class="content">
       <ActiveFilters :filters="filtersList" @remove="clearFilter" />
 
-      <ProductGrid :products="products" @view="onView" />
+      <div v-if="loading" class="skeleton-grid">
+        <div v-for="i in 6" :key="i" class="skeleton-card" />
+      </div>
+      <ProductGrid v-else :products="products" @view="onView" />
+
+      <div class="empty">
+        <p>No results found</p>
+        <BaseButton @click="clearFilter">Reset Filters</BaseButton>
+      </div>
+
+      <div v-if="error">{{ error }}</div>
     </div>
   </MainLayout>
 </template>
@@ -79,5 +93,11 @@ function onView(id: string | number) {
 .content {
   display: flex;
   flex-direction: column;
+}
+
+.skeleton-card {
+  height: 200px;
+  background: #eee;
+  border-radius: 12px;
 }
 </style>
