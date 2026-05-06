@@ -1,24 +1,28 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import SidebarSection from './SidebarSection.vue'
+import { useFilterStore } from '@/stores/filter.store'
+import BaseRadio from '../base/BaseRadio.vue'
 
-const selected = ref('')
-
-const emit = defineEmits<{
-  (e: 'change', value: string): void
-}>()
-
-function update(value: string) {
-  selected.value = value
-  emit('change', value)
-}
+const store = useFilterStore()
 </script>
 
 <template>
-  <SidebarSection title="Sort By">
-    <label v-for="item in ['price', 'name', 'rank', 'latest']" :key="item">
-      <input type="radio" :value="item" v-model="selected" @change="update(item)" />
-      {{ item }}
-    </label>
-  </SidebarSection>
+  <label>
+    <BaseRadio v-model="store.sort" value="price-asc" />
+    Price ↑
+  </label>
+
+  <label>
+    <BaseRadio v-model="store.sort" value="price-desc" />
+    Price ↓
+  </label>
+
+  <label>
+    <BaseRadio v-model="store.sort" value="alphabetical" />
+    A → Z
+  </label>
+
+  <label>
+    <BaseRadio v-model="store.sort" value="rating" />
+    Rating
+  </label>
 </template>

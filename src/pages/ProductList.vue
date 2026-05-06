@@ -1,84 +1,115 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
+import { onMounted, computed, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+
 import MainLayout from '@/components/layouts/MainLayout.vue'
-import Sidebar from '@/components/sidebar/AppSidebar.vue'
+import AppSidebar from '@/components/sidebar/AppSidebar.vue'
 import ProductGrid from '@/components/product/ProductGrid.vue'
 import ActiveFilters from '@/components/product/ActiveFilters.vue'
-
-import { useFilters } from '@/composables/useFilters'
-import { computed, onMounted } from 'vue'
-
-import type { FilterItem } from '@/types/filter'
-import { useProductStore } from '@/stores/product.store'
 import BaseButton from '@/components/base/BaseButton.vue'
 
-const productStore = useProductStore()
+import { useProducts } from '@/composables/useProducts'
+import { useFilterStore } from '@/stores/filter.store'
+import type { FilterItem } from '@/types/filter'
 
-onMounted(() => productStore.fetchProducts())
+const router = useRouter()
+const route = useRoute()
 
-const products = computed(() => productStore.products)
-const loading = computed(() => productStore.loading)
-const error = computed(() => productStore.error)
+const { products, categories, fetchProducts, loading, error } = useProducts()
+const filterStore = useFilterStore()
 
-const { search, sort, category, setSearch, setSort, setCategory, clearFilter } = useFilters()
+// ✅ INIT (URL → STORE)
+onMounted(() => {
+  filterStore.setFromQuery(route.query)
+  fetchProducts()
+})
 
+// ✅ STORE → URL
+watch(
+  () => ({
+    search: filterStore.search,
+    category: filterStore.category,
+    sort: filterStore.sort,
+    hideZero: filterStore.hideZeroPrice,
+  }),
+  (filters) => {
+    const query = Object.fromEntries(
+      Object.entries({
+        search: filters.search,
+        category: filters.category,
+        sort: filters.sort,
+        hideZero: filters.hideZero ? 'true' : '',
+      }).filter(([, v]) => v),
+    )
+
+    router.replace({ query })
+  },
+  { deep: true },
+)
+
+// ✅ Filters UI
 const filtersList = computed<FilterItem[]>(() => {
   const list: FilterItem[] = []
 
-  if (search.value) {
-    list.push({ type: 'search', label: search.value })
+  if (filterStore.search) {
+    list.push({ type: 'search', label: filterStore.search })
   }
 
-  if (category.value) {
-    list.push({ type: 'category', label: category.value })
+  if (filterStore.category) {
+    list.push({ type: 'category', label: filterStore.category })
   }
 
-  if (sort.value) {
-    list.push({ type: 'sort', label: sort.value })
+  if (filterStore.sort) {
+    list.push({ type: 'sort', label: filterStore.sort })
   }
 
   return list
 })
 
-const router = useRouter()
-
-const categories = [
-  { id: '1', name: 'Phones', count: 12 },
-  { id: '2', name: 'Laptops', count: 8 },
-]
-
-function onView(id: string | number) {
+function onView(id: number) {
   router.push(`/products/${id}`)
+}
+
+function resetFilters() {
+  filterStore.resetAll()
 }
 </script>
 
 <template>
   <MainLayout>
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <Sidebar
-        @search="setSearch"
-        @sort-change="setSort"
-        @category-change="setCategory"
+    <div class="layout">
+      <!-- Sidebar -->
+      <AppSidebar
         :categories="categories"
+        @search="filterStore.setSearch"
+        @category-change="filterStore.setCategory"
+        @sort-change="filterStore.setSort"
+        @toggle-zero-price="filterStore.setHideZeroPrice"
       />
-    </div>
 
-    <!-- Content -->
-    <div class="content">
-      <ActiveFilters :filters="filtersList" @remove="clearFilter" />
+      <!-- Content -->
+      <div class="content">
+        <ActiveFilters :filters="filtersList" @remove="filterStore.clearFilter" />
 
-      <div v-if="loading" class="skeleton-grid">
-        <div v-for="i in 6" :key="i" class="skeleton-card" />
+        <!-- Loading -->
+        <div v-if="loading">Loading...</div>
+
+        <!-- Error -->
+        <div v-else-if="error" class="error">
+          <p>Something went wrong</p>
+          <small>{{ error }}</small>
+          <BaseButton @click="fetchProducts">Retry</BaseButton>
+        </div>
+
+        <!-- Empty -->
+        <div v-else-if="products.length === 0" class="empty">
+          <p>No results found</p>
+          <BaseButton @click="resetFilters">Reset Filters</BaseButton>
+        </div>
+
+        <!-- Products -->
+        <ProductGrid v-else :products="products" @view="onView" />
       </div>
-      <ProductGrid v-else :products="products" @view="onView" />
-
-      <div class="empty">
-        <p>No results found</p>
-        <BaseButton @click="clearFilter">Reset Filters</BaseButton>
-      </div>
-
-      <div v-if="error">{{ error }}</div>
     </div>
   </MainLayout>
 </template>
@@ -95,9 +126,12 @@ function onView(id: string | number) {
   flex-direction: column;
 }
 
-.skeleton-card {
-  height: 200px;
-  background: #eee;
-  border-radius: 12px;
+.empty {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.error {
+  color: red;
 }
 </style>

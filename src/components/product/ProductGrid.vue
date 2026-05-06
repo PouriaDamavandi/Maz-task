@@ -1,10 +1,4 @@
 <script setup lang="ts">
-type Product = {
-  id: string
-  title: string
-  image: string
-}
-
 defineProps<{
   products: Product[]
 }>()
@@ -24,6 +18,7 @@ const emit = defineEmits(['view'])
 </template>
 
 <script lang="ts">
+import type { Product } from '@/types/product'
 import ProductCard from './ProductCard.vue'
 export default { components: { ProductCard } }
 </script>

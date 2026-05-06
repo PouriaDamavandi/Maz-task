@@ -1,23 +1,16 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import SidebarSection from './SidebarSection.vue'
-import BaseInput from '@/components/base/BaseInput.vue'
-import BaseButton from '@/components/base/BaseButton.vue'
+import { computed } from 'vue'
+import { useFilterStore } from '@/stores/filter.store'
+import BaseInput from '../base/BaseInput.vue'
 
-const search = ref('')
+const store = useFilterStore()
 
-const emit = defineEmits<{
-  (e: 'search', value: string): void
-}>()
-
-function onSearch() {
-  emit('search', search.value)
-}
+const search = computed({
+  get: () => store.search,
+  set: (val: string) => store.setSearch(val),
+})
 </script>
 
 <template>
-  <SidebarSection title="Search">
-    <BaseInput v-model="search" placeholder="Search..." />
-    <BaseButton @click="onSearch" aria-label="Search products">Search</BaseButton>
-  </SidebarSection>
+  <BaseInput v-model="search" placeholder="Search..." />
 </template>

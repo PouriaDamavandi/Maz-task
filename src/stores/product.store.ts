@@ -1,31 +1,40 @@
 import { defineStore } from 'pinia'
-
-type Product = {
-  id: string
-  title: string
-  image: string
-  category: string
-  price: number
-}
+import { getProducts, getProductById } from '@/api/product.api'
+import type { Product } from '@/types/product'
 
 export const useProductStore = defineStore('product', {
   state: () => ({
     products: [] as Product[],
+    selectedProduct: null as Product | null,
     loading: false,
-    error: false
+    error: null as string | null,
+    isFetched: false,
   }),
 
   actions: {
     async fetchProducts() {
       this.loading = true
+      this.error = null
 
-      // Mock (replace with API later)
-      this.products = [
-        { id: '1', title: 'Phone', image: '', category: 'phones', price: 200 },
-        { id: '2', title: 'Laptop', image: '', category: 'laptops', price: 1000 },
-      ]
+      try {
+        this.products = await getProducts()
+        this.isFetched = true
+      } catch {
+        this.error = 'Failed to fetch products'
+      } finally {
+        this.loading = false
+      }
+    },
 
-      this.loading = false
+    async fetchProduct(id: number) {
+      this.loading = true
+      try {
+        this.selectedProduct = await getProductById(id)
+      } catch {
+        this.error = 'Failed to fetch product'
+      } finally {
+        this.loading = false
+      }
     },
   },
 })

@@ -12,6 +12,6 @@ export function useFilters() {
     setSearch: store.setSearch,
     setSort: store.setSort,
     setCategory: store.setCategory,
-    clearFilter: store.clearFilterByType,
+    clearFilter: store.clearFilter,
   }
 }

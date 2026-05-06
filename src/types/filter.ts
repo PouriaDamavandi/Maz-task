@@ -1,6 +1,6 @@
-export type FilterType = 'search' | 'sort' | 'category'
+export type FilterType = 'search' | 'category' | 'sort'
 
-export type FilterItem = {
+export interface FilterItem {
   type: FilterType
   label: string
 }

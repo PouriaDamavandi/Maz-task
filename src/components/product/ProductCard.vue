@@ -1,9 +1,6 @@
 <script setup lang="ts">
-type Product = {
-  id: string
-  title: string
-  image: string
-}
+import type { Product } from '@/types/product'
+import BaseButton from '../base/BaseButton.vue'
 
 const { product } = defineProps<{
   product: Product
@@ -20,7 +17,7 @@ const emit = defineEmits<{
 
     <h3 class="title">{{ product.title }}</h3>
 
-    <button class="btn" @click="emit('view', product.id)">View Details</button>
+    <BaseButton class="btn" @click="emit('view', product.id.toString())">View Details</BaseButton>
   </div>
 </template>
 
@@ -52,5 +49,4 @@ const emit = defineEmits<{
   padding: 8px 12px;
   border-radius: 6px;
 }
-
 </style>
