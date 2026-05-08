@@ -1,5 +1,5 @@
 import type { Product } from '@/types/product'
-import shirt from '/shirt.png'
+import shirt from '@/assets/images/shirt.png'
 
 export const mockProducts: Product[] = [
   {

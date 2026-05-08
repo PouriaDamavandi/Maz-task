@@ -1,94 +1,116 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import BaseButton from '../base/BaseButton.vue'
+import { ref, type Component } from 'vue'
+import type { NavItem } from '@/types/navigation'
+
+import BaseButton from '@/components/base/BaseButton.vue'
+import AppNav from './AppNav.vue'
 
 const isMenuOpen = ref(false)
+
+defineProps<{
+  ctaText: string
+  ctaIcon?: Component
+  ctaIconProps?: Record<string, unknown>
+  navItems: NavItem[]
+  ctaAction?: () => void
+}>()
 </script>
 
 <template>
   <header class="header">
-    <div class="left">
-      <BaseButton class="cta">Call to Action</BaseButton>
+    <div class="desktop-nav">
+      <AppNav :items="navItems" />
     </div>
 
-    <div class="right desktop-nav">
-      <nav aria-label="Main navigation">
-        <ul>
-          <li>Home</li>
-          <li class="nav-item">
-            Products
-            <span class="dot" />
-          </li>
-          <li>About</li>
-        </ul>
-      </nav>
-    </div>
+    <BaseButton class="mobile-btn" variant="outline" @click="isMenuOpen = !isMenuOpen">
+      ☰
+    </BaseButton>
 
-    <div class="mobile-menu">
-      <BaseButton @click="isMenuOpen = !isMenuOpen">☰</BaseButton>
-    </div>
+    <BaseButton class="cta" variant="outline" @click="ctaAction">
+      <span class="cta-text">{{ ctaText }}</span>
+      <component :is="ctaIcon" v-bind="ctaIconProps" class="cta-icon" />
+    </BaseButton>
   </header>
 </template>
 
 <style scoped>
 .header {
+  height: 120px;
+  background: var(--bg-white);
+  border-radius: 0 0 28px 28px;
+  padding-inline: 40px 164px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding-top: 40px;
-  padding-bottom: 40px;
+  justify-content: space-between;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
 }
 
-/* Nav */
-ul {
+.desktop-nav {
+  flex: 1;
   display: flex;
-  gap: 24px;
-  list-style: none;
+  justify-content: center;
 }
 
-/* Red dot */
-.nav-item {
-  position: relative;
+.cta {
+  min-width: 110px;
+  height: 48px;
+  border-radius: 16px;
+  background: var(--btn-primary);
+  color: var(--text-white);
+  border: none;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
-.dot {
-  width: 6px;
-  height: 6px;
-  background: var(--color-primary);
-  border-radius: 50%;
-  position: absolute;
-  bottom: -6px;
-  left: 50%;
-}
-
-li:hover {
-  color: var(--color-primary);
-  cursor: pointer;
-}
-
-/* Mobile */
-.mobile-menu {
+.mobile-btn {
   display: none;
+  font-size: 16px;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 1439px) and (min-width: 769px) {
+  .header {
+    padding-inline: 40px 80px;
+  }
+}
+
+@media (max-width: 768px) {
   .desktop-nav {
     display: none;
   }
 
-  .mobile-menu {
+  .mobile-btn {
     display: block;
+    background: transparent;
+    font-size: 16px;
+    border: 1px solid var(--bg-red);
+  }
+
+  .cta {
+    min-width: 40px;
+    width: 40px;
+    height: 40px;
+    background-color: var(--bg-white);
+    color: var(--text-primary);
+    border: 1px solid var(--bg-red);
+    padding: 0;
+    border-radius: 8px;
+  }
+
+  .cta-text {
+    display: none;
+  }
+
+  .cta-icon {
+    display: inline-block;
   }
 
   .header {
-    padding-top: 16px;
-    padding-bottom: 16px;
-  }
-
-  .btn {
-    background: transparent;
-    border: 1px solid var(--btn-primary);
-    color: var(--btn-primary);
+    padding-inline: 16px;
   }
 }
 </style>

@@ -2,7 +2,7 @@
 import { onMounted, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
-import MainLayout from '@/components/layouts/MainLayout.vue'
+import AppLayout from '@/components/layouts/AppLayout.vue'
 import AppSidebar from '@/components/sidebar/AppSidebar.vue'
 import ProductGrid from '@/components/product/ProductGrid.vue'
 import ActiveFilters from '@/components/product/ActiveFilters.vue'
@@ -76,8 +76,8 @@ function resetFilters() {
 </script>
 
 <template>
-  <MainLayout>
-    <div class="layout">
+  <AppLayout>
+    <div class="page-layout">
       <!-- Sidebar -->
       <AppSidebar
         :categories="categories"
@@ -111,14 +111,14 @@ function resetFilters() {
         <ProductGrid v-else :products="products" @view="onView" />
       </div>
     </div>
-  </MainLayout>
+  </AppLayout>
 </template>
 
 <style scoped>
-.layout {
+.page-layout {
   display: grid;
   grid-template-columns: 280px 1fr;
-  gap: 24px;
+  gap: 16px;
 }
 
 .content {
@@ -132,6 +132,6 @@ function resetFilters() {
 }
 
 .error {
-  color: red;
+  color: var(--text-primary);
 }
 </style>

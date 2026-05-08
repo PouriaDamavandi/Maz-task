@@ -2,7 +2,7 @@
 import { onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 
-import MainLayout from '@/components/layouts/MainLayout.vue'
+import AppLayout from '@/components/layouts/AppLayout.vue'
 import ProductBreadcrumb from '@/components/product/ProductBreadcrumb.vue'
 import ProductImage from '@/components/product/ProductImage.vue'
 import ProductDetails from '@/components/product/ProductDetails.vue'
@@ -15,7 +15,7 @@ const store = useProductStore()
 const id = Number(route.params.id)
 
 onMounted(() => {
-  store.fetchProduct(id) // ✅ FIXED name
+  store.fetchProduct(id)
 })
 
 const product = computed(() => store.selectedProduct)
@@ -34,7 +34,7 @@ const details = computed(() => {
 </script>
 
 <template>
-  <MainLayout>
+  <AppLayout>
     <div v-if="store.loading">Loading...</div>
 
     <div v-else-if="store.error">{{ store.error }}</div>
@@ -51,5 +51,5 @@ const details = computed(() => {
 
       <ProductDetails :details="details" />
     </div>
-  </MainLayout>
+  </AppLayout>
 </template>

@@ -1,37 +1,38 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="container">
+  <main class="container">
     <slot />
-  </div>
+  </main>
 </template>
 
 <style scoped>
 .container {
-  margin: 0 auto;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: 64px;
+  flex: 1;
+  padding-bottom: 64px;
 }
 
-/* Desktop */
+/* Large Desktop */
 @media (min-width: 1440px) {
   .container {
-    padding-left: 164px;
-    padding-right: 164px;
+    padding-inline: 164px;
   }
 }
 
 /* Tablet */
-@media (max-width: 1439px) and (min-width: 768px) {
+@media (max-width: 1439px) and (min-width: 361px) {
   .container {
-    padding-left: 80px;
-    padding-right: 80px;
+    padding-inline: 80px;
   }
 }
 
 /* Mobile */
-@media (max-width: 767px) {
+@media (max-width: 360px) {
   .container {
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-inline: 16px;
   }
 }
 </style>

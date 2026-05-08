@@ -6,7 +6,7 @@ export const useFilterStore = defineStore('filter', {
   state: () => ({
     search: '',
     category: '',
-    sort: '' as SortType | '',
+    sort: '',
     hideZeroPrice: false,
   }),
 
