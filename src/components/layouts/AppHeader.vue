@@ -4,6 +4,7 @@ import type { NavItem } from '@/types/navigation'
 
 import BaseButton from '@/components/base/BaseButton.vue'
 import AppNav from './AppNav.vue'
+import AppMobileMenu from './AppMobileMenu.vue'
 
 const isMenuOpen = ref(false)
 
@@ -26,10 +27,12 @@ defineProps<{
       ☰
     </BaseButton>
 
+    <AppMobileMenu :open="isMenuOpen" :items="navItems" @close="isMenuOpen = false" />
     <BaseButton class="cta" variant="outline" @click="ctaAction">
       <span class="cta-text">{{ ctaText }}</span>
       <component :is="ctaIcon" v-bind="ctaIconProps" class="cta-icon" />
     </BaseButton>
+
   </header>
 </template>
 
