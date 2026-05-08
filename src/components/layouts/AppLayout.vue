@@ -39,16 +39,14 @@ const navItems: NavItem[] = [
 </script>
 
 <template>
-  <div class="layout">
-    <AppHeader
-      cta-text="تماس"
-      :cta-icon="IconPhoneCall"
-      :cta-icon-props="{ size: 16 }"
-      :nav-items="navItems"
-    />
-    <AppContainer>
-      <slot />
-    </AppContainer>
-    <AppFooter />
-  </div>
+  <AppHeader
+    cta-text="تماس"
+    :cta-icon="IconPhoneCall"
+    :cta-icon-props="{ size: 16 }"
+    :nav-items="navItems"
+  />
+  <AppContainer>
+    <slot />
+  </AppContainer>
+  <AppFooter />
 </template>
