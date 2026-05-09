@@ -25,7 +25,8 @@ defineProps<{
   gap: 10px;
   background: var(--bg-white);
   border-radius: 12px;
-  padding: 16px;
+  padding: 32px 24px;
+  width: 100%;
 }
 
 .row {
