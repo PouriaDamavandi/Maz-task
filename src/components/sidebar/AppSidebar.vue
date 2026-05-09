@@ -1,7 +1,11 @@
+<!-- AppSidebar.vue -->
 <script setup lang="ts">
-import SidebarSearch from './SidebarSearch.vue'
-import SidebarSort from './SidebarSort.vue'
-import SidebarCategories from './SidebarCategories.vue'
+import { ref, onMounted, onUnmounted } from 'vue'
+
+import DesktopSidebar from './DesktopSidebar.vue'
+import MobileFilters from './MobileFilters.vue'
+
+import type { SortType } from '@/stores/filter.store'
 
 type Category = {
   id: string
@@ -9,27 +13,41 @@ type Category = {
   count: number
 }
 
-const { categories } = defineProps<{
+defineProps<{
   categories: Category[]
 }>()
 
-const emit = defineEmits(['search', 'sort-change', 'category-change'])
+const emit = defineEmits<{
+  (e: 'search', value: string): void
+  (e: 'sort-change', value: SortType): void
+  (e: 'category-change', value: string): void
+}>()
+
+const isMobile = ref(false)
+
+function updateScreen() {
+  isMobile.value = window.innerWidth <= 1024
+}
+
+onMounted(() => {
+  updateScreen()
+  window.addEventListener('resize', updateScreen)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', updateScreen)
+})
 </script>
 
 <template>
-  <aside class="sidebar">
-    <SidebarSearch @search="emit('search', $event)" />
+  <MobileFilters v-if="isMobile" :categories="categories" />
 
-    <SidebarSort @change="emit('sort-change', $event)" />
-
-    <SidebarCategories :categories="categories" @change="emit('category-change', $event)" />
-  </aside>
+  <DesktopSidebar
+    v-else
+    :categories="categories"
+    @search="emit('search', $event)"
+    @sort-change="emit('sort-change', $event)"
+    @category-change="emit('category-change', $event)"
+  />
 </template>
 
-<style scoped>
-.sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-</style>

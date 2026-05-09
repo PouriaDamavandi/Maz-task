@@ -6,24 +6,29 @@ defineProps<{
 
 <template>
   <div class="image-wrapper">
-    <img :src="src" class="image" alt="Product image" />
+    <img :src="src" class="image" />
   </div>
 </template>
 
 <style scoped>
 .image-wrapper {
   width: 100%;
-  max-width: 400px;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
+
+  border-radius: 12px;
+  background: #fafafa;
 }
 
 .image {
   width: 100%;
-  transition: transform 0.3s;
+  height: 100%;
+  object-fit: contain;
+
+  transition: transform 0.3s ease;
 }
 
-/* Basic zoom effect */
 .image:hover {
-  transform: scale(1.2);
+  transform: scale(1.1);
 }
 </style>

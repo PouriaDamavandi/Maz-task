@@ -21,22 +21,33 @@ defineProps<{
 <style scoped>
 .details {
   background: var(--bg-light);
-  padding: 20px;
+  padding: 16px;
+
   border-radius: 12px;
+
   display: grid;
-  gap: 12px;
+  gap: 10px;
 }
 
 .row {
   display: grid;
-  grid-template-columns: 150px 1fr;
+  grid-template-columns: 140px 1fr;
+  gap: 10px;
 }
 
 .label {
   color: var(--text-muted);
+  font-size: 13px;
 }
 
 .value {
-  color: var(--text-primary);
+  font-size: 13px;
+}
+
+/* mobile stack */
+@media (max-width: 600px) {
+  .row {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

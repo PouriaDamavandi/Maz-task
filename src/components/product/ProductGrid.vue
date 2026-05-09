@@ -23,23 +23,32 @@ const emit = defineEmits(['view'])
 <style scoped>
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  gap: 16px;
+
+  /* fluid responsive grid */
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 }
 
-/* Tablet */
-@media (max-width: 1028px) {
+/* tablets */
+@media (max-width: 1024px) {
   .grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 14px;
   }
 }
 
-/* Mobile */
-@media (max-width: 767px) {
+/* mobile */
+@media (max-width: 600px) {
   .grid {
-    grid-template-columns: repeat(1, 1fr);
-    gap: 8px;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+  }
+}
+
+/* very small phones */
+@media (max-width: 380px) {
+  .grid {
+    grid-template-columns: 1fr;
   }
 }
 </style>
