@@ -1,4 +1,4 @@
-export type FilterType = 'search' | 'category' | 'sort'
+export type FilterType = 'search' | 'category' | 'sort' | 'none-zero'
 
 export interface FilterItem {
   type: FilterType

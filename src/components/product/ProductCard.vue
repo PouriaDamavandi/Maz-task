@@ -13,40 +13,90 @@ const emit = defineEmits<{
 
 <template>
   <div class="card">
-    <img :src="product.image" class="image" />
+    <div class="image-wrap">
+      <img :src="product.image" class="image" />
+    </div>
 
     <h3 class="title">{{ product.title }}</h3>
 
-    <BaseButton class="btn" @click="emit('view', product.id.toString())">View Details</BaseButton>
+    <BaseButton class="btn" variant="outline" @click="emit('view', product.id.toString())">
+      مشاهده جزییات >
+    </BaseButton>
   </div>
 </template>
 
 <style scoped>
 .card {
   background: white;
-  padding: 16px;
-  border-radius: 12px;
+  padding: 12px;
+
+  border-radius: 14px;
+
+  display: flex;
+  flex-direction: column;
+
+  transition: 0.2s ease;
 }
 
 .card:hover {
-  transform: translateY(-4px);
-  transition: 0.2s;
+  transform: translateY(-3px);
+}
+
+/* image container fixes overflow */
+.image-wrap {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  border-radius: 10px;
+  background: #fafafa;
 }
 
 .image {
   width: 100%;
-  height: 180px;
-  object-fit: cover;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.card:hover .image {
+  transform: scale(1.08);
 }
 
 .title {
-  margin: 12px 0;
+  margin: 10px 0;
+  font-size: 13px;
+
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+
+  overflow: hidden;
+  min-height: 36px;
 }
 
 .btn {
-  background: var(--btn-primary);
-  color: white;
-  padding: 8px 12px;
-  border-radius: 6px;
+  width: 100%;
+  height: 38px;
+  background-color: white;
+  border-radius: 12px;
+  font-size: 13px;
+}
+
+/* mobile tuning */
+@media (max-width: 600px) {
+  .card {
+    padding: 10px;
+  }
+
+  .title {
+    font-size: 12px;
+  }
 }
 </style>

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import IconSearch from '../icons/IconSearch.vue'
+
 defineProps<{
   src: string
 }>()
@@ -6,24 +8,42 @@ defineProps<{
 
 <template>
   <div class="image-wrapper">
-    <img :src="src" class="image" alt="Product image" />
+    <img :src="src" class="image" />
+    <component :is="IconSearch" class="zoom" />
   </div>
 </template>
 
 <style scoped>
 .image-wrapper {
   width: 100%;
-  max-width: 400px;
   overflow: hidden;
+  position: relative;
+  border-radius: 12px;
 }
 
+.zoom {
+  background-color: grey;
+  border-radius: 8px;
+  position: absolute;
+  padding: 4px;
+  z-index: 100;
+  top: 30px;
+  right: 30px;
+}
+
+svg {
+  width: 48px;
+  height: 48px;
+  color: white;
+}
 .image {
   width: 100%;
-  transition: transform 0.3s;
+  height: 310px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
 }
 
-/* Basic zoom effect */
 .image:hover {
-  transform: scale(1.2);
+  transform: scale(1.5);
 }
 </style>
